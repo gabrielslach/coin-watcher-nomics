@@ -69,6 +69,16 @@ registerRoute(
   })
 );
 
+registerRoute(
+  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.WAV'),
+  new StaleWhileRevalidate({
+    cacheName: 'audio',
+    plugins: [
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
